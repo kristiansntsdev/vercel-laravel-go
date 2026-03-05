@@ -117,7 +117,7 @@ func bootstrap() error {
 		} else {
 			vendorURL := os.Getenv("VENDOR_URL")
 			if vendorURL == "" {
-				return fmt.Errorf("VENDOR_URL required (no bundled vendor.tar.gz found)")
+				return fmt.Errorf("vendor.tar.gz not found at /var/task/vendor.tar.gz — run 'bash scripts/pack.sh' before deploying")
 			}
 			if err := downloadAndExtractTarGz(vendorURL, "/tmp"); err != nil {
 				return fmt.Errorf("download vendor: %w", err)

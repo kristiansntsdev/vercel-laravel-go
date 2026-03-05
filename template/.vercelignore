@@ -1,6 +1,6 @@
 # Dependencies
 node_modules
-vendor
+/vendor
 
 # Laravel storage (except framework stubs)
 storage/logs

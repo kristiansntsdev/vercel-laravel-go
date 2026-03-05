@@ -7,7 +7,6 @@
     "api/main.go": {
       "runtime": "@vercel/go@3.4.3",
       "includeFiles": "**",
-      "memory": 1024,
       "maxDuration": 60
     }
   },

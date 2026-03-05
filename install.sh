@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # install.sh — Adds vercel-laravel-go files to an existing Laravel project.
 # Usage (run in your Laravel project root):
-#   curl -fsSL https://raw.githubusercontent.com/kristiansnts/vercel-laravel-go/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/kristiansntsdev/vercel-laravel-go/main/install.sh | bash
 set -euo pipefail
 
-REPO_RAW="https://raw.githubusercontent.com/kristiansnts/vercel-laravel-go/main/template"
+REPO_RAW="https://raw.githubusercontent.com/kristiansntsdev/vercel-laravel-go/main/template"
 TARGET_DIR="$(pwd)"
 
 echo ""
@@ -73,8 +73,8 @@ echo ""
 echo "  4. Push to main — GitHub Actions will deploy automatically."
 echo "     (vercel-prepare.sh runs at build time to bundle PHP-FPM + Laravel files)"
 echo ""
-echo "  See README for details: https://github.com/kristiansnts/vercel-laravel-go"
+echo "  See README for details: https://github.com/kristiansntsdev/vercel-laravel-go"
 echo ""
 echo "  ⭐ If this helped you, don't forget to give us a star!"
-echo "     https://github.com/kristiansnts/vercel-laravel-go"
+echo "     https://github.com/kristiansntsdev/vercel-laravel-go"
 echo ""

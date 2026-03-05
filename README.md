@@ -31,7 +31,7 @@ This project adds a **Go serverless function** to your Laravel project that:
 Run in your Laravel project root:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kristiansnts/vercel-laravel-go/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kristiansntsdev/vercel-laravel-go/main/install.sh | bash
 ```
 
 Then follow the printed steps:

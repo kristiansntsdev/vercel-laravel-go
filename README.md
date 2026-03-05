@@ -88,6 +88,18 @@ CACHE_STORE=redis
 LOG_CHANNEL=stderr
 ```
 
+## Adding New Composer Dependencies
+
+When you add a new package with `composer require`, you need to rebuild `vendor.tar.gz` before deploying:
+
+```bash
+# After composer require some/package...
+bash scripts/pack.sh      # repacks vendor/ into api/vendor.tar.gz
+vercel deploy --prod      # or just push to main if using GitHub Actions
+```
+
+**Using GitHub Actions?** Just push — the CI workflow runs `composer install` and `pack.sh` automatically on every deploy. No manual step needed.
+
 ## Upstash Redis Setup (required for Filament/Livewire)
 
 1. Go to [upstash.com](https://upstash.com) → Create a free Redis database

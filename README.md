@@ -37,14 +37,14 @@ curl -fsSL https://raw.githubusercontent.com/kristiansntsdev/vercel-laravel-go/m
 Then follow the printed steps:
 
 ```bash
-# 1. Pack vendor into api/vendor.tar.gz
+# 1. Pack vendor into api/vendor.tar.gz and commit it (required — Vercel needs it at build time)
 bash scripts/pack.sh
-
-# 2. Deploy (PHP-FPM binary is downloaded automatically at build time)
-vercel deploy --prod
+git add api/vendor.tar.gz
+git commit -m "chore: add vendor.tar.gz for Vercel deployment"
+git push
 ```
 
-> **Note:** `scripts/setup.sh` is only needed if you want to test locally with a Linux VM/container. For Vercel deployments, `vercel-prepare.sh` handles the PHP-FPM binary automatically during build.
+> **Why commit `api/vendor.tar.gz`?** Vercel's build environment doesn't have PHP/Composer, so the packed vendor must be pre-built and included in the repository. It's ~30MB — well within GitHub's 100MB file limit. Only re-run `pack.sh` and recommit when `composer.json` changes.
 
 ## Environment Variables
 
@@ -90,15 +90,17 @@ LOG_CHANNEL=stderr
 
 ## Adding New Composer Dependencies
 
-When you add a new package with `composer require`, you need to rebuild `vendor.tar.gz` before deploying:
+When you add a new package with `composer require`, rebuild and recommit `vendor.tar.gz`:
 
 ```bash
 # After composer require some/package...
-bash scripts/pack.sh      # repacks vendor/ into api/vendor.tar.gz
-vercel deploy --prod      # or just push to main if using GitHub Actions
+bash scripts/pack.sh
+git add api/vendor.tar.gz
+git commit -m "chore: update vendor.tar.gz"
+git push
 ```
 
-**Using GitHub Actions?** Just push — the CI workflow runs `composer install` and `pack.sh` automatically on every deploy. No manual step needed.
+**Using GitHub Actions CI?** The CI workflow runs `composer install` and `pack.sh` automatically — but the result is not committed back to git. You still need to commit `vendor.tar.gz` locally after dependency changes, OR let CI deploy directly via `vercel deploy --prod` (it uploads the file without needing it in git).
 
 ## Upstash Redis Setup (required for Filament/Livewire)
 
@@ -149,7 +151,7 @@ your-laravel-project/
 ├── api/
 │   ├── main.go               # Go serverless function (FastCGI proxy)
 │   ├── go.mod
-│   └── vendor.tar.gz         # Compressed vendor — gitignored, built by pack.sh
+│   └── vendor.tar.gz         # Compressed vendor — committed to git, built by pack.sh
 ├── scripts/
 │   ├── setup.sh              # Downloads static PHP-FPM binary (optional, local use only)
 │   ├── pack.sh               # Packs vendor/ into api/vendor.tar.gz

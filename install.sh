@@ -48,12 +48,18 @@ echo ""
 echo "==> Patching .gitignore..."
 GITIGNORE="$TARGET_DIR/.gitignore"
 touch "$GITIGNORE"
-for entry in "api/php-fpm-bin" "api/vendor.tar.gz" "api/laravel/"; do
+# Add build artifacts that should NOT be committed
+for entry in "api/php-fpm-bin" "api/laravel/"; do
     if ! grep -qF "$entry" "$GITIGNORE"; then
         echo "$entry" >> "$GITIGNORE"
         echo "  Added: $entry"
     fi
 done
+# Remove api/vendor.tar.gz from .gitignore if a previous version added it — it must be committed
+if grep -qF "api/vendor.tar.gz" "$GITIGNORE"; then
+    sed -i.bak '/api\/vendor\.tar\.gz/d' "$GITIGNORE" && rm -f "$GITIGNORE.bak"
+    echo "  Removed: api/vendor.tar.gz (must be committed for Vercel deployment)"
+fi
 
 echo ""
 echo "==> Patching .vercelignore..."
@@ -62,6 +68,11 @@ VERCELIGNORE="$TARGET_DIR/.vercelignore"
 if grep -qE "^vendor$" "$VERCELIGNORE" 2>/dev/null; then
     sed -i.bak 's|^vendor$|/vendor|' "$VERCELIGNORE" && rm -f "$VERCELIGNORE.bak"
     echo "  Fixed: 'vendor' → '/vendor' in .vercelignore"
+fi
+# Force-include api/vendor.tar.gz even if .gitignore had it
+if ! grep -qF "!api/vendor.tar.gz" "$VERCELIGNORE" 2>/dev/null; then
+    printf "\n# Force-include vendor.tar.gz even if it's in .gitignore\n!api/vendor.tar.gz\n" >> "$VERCELIGNORE"
+    echo "  Added: !api/vendor.tar.gz to .vercelignore"
 fi
 
 chmod +x "$TARGET_DIR/scripts/setup.sh"

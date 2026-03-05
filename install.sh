@@ -55,6 +55,15 @@ for entry in "api/php-fpm-bin" "api/vendor.tar.gz" "api/laravel/"; do
     fi
 done
 
+echo ""
+echo "==> Patching .vercelignore..."
+VERCELIGNORE="$TARGET_DIR/.vercelignore"
+# Ensure vendor is anchored (/vendor) so api/vendor.tar.gz is not accidentally excluded
+if grep -qE "^vendor$" "$VERCELIGNORE" 2>/dev/null; then
+    sed -i.bak 's|^vendor$|/vendor|' "$VERCELIGNORE" && rm -f "$VERCELIGNORE.bak"
+    echo "  Fixed: 'vendor' → '/vendor' in .vercelignore"
+fi
+
 chmod +x "$TARGET_DIR/scripts/setup.sh"
 chmod +x "$TARGET_DIR/scripts/pack.sh"
 chmod +x "$TARGET_DIR/scripts/vercel-prepare.sh"

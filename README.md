@@ -60,6 +60,7 @@ git push
 | `DB_USERNAME` | Database username |
 | `DB_PASSWORD` | Database password |
 | `REDIS_URL` | Upstash Redis URL (`rediss://default:pass@host:port`) |
+| `REDIS_CLIENT` | Must be `predis` (Laravel's default `phpredis` extension is not available) |
 
 ### Pre-configured in `vercel.json`
 

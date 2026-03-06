@@ -104,7 +104,7 @@ func bootstrap() error {
 			}
 		} else {
 			phpFpmURL := envOrDefault("PHP_FPM_URL",
-				"https://dl.static-php.dev/static-php-cli/bulk/php-8.4.18-fpm-linux-x86_64.tar.gz")
+				"https://dl.static-php.dev/static-php-cli/bulk/php-8.4.17-fpm-linux-x86_64.tar.gz")
 			if err := downloadAndExtractFile(phpFpmURL, phpFpmDst, "php-fpm"); err != nil {
 				return fmt.Errorf("download php-fpm: %w", err)
 			}
